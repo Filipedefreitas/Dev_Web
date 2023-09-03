@@ -1,0 +1,3 @@
+public interface PessoaRepository extends JpaRepository<Pessoa, Long> {
+    // Métodos de busca personalizados se necessário
+}

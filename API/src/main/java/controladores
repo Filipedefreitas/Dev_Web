@@ -1,0 +1,43 @@
+@RestController
+@RequestMapping("/api/pessoas")
+public class PessoaController {
+    @Autowired
+    private PessoaRepository pessoaRepository;
+    
+    @PostMapping
+    public Pessoa criarPessoa(@RequestBody Pessoa pessoa) {
+        return pessoaRepository.save(pessoa);
+    }
+    
+    @GetMapping
+    public List<Pessoa> buscarTodasPessoas() {
+        return pessoaRepository.findAll();
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<Pessoa> buscarPessoaPorId(@PathVariable Long id) {
+        Optional<Pessoa> pessoa = pessoaRepository.findById(id);
+        return pessoa.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<Pessoa> atualizarPessoa(@PathVariable Long id, @RequestBody Pessoa novaPessoa) {
+        Optional<Pessoa> pessoaExistente = pessoaRepository.findById(id);
+        if (pessoaExistente.isPresent()) {
+            Pessoa pessoa = pessoaExistente.get();
+            pessoa.setNome(novaPessoa.getNome());
+            pessoa.setTipoDeficiencia(novaPessoa.getTipoDeficiencia());
+            
+            pessoaRepository.save(pessoa);
+            return ResponseEntity.ok(pessoa);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluirPessoa(@PathVariable Long id) {
+        pessoaRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+}
