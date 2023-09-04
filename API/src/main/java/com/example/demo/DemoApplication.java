@@ -11,13 +11,3 @@ public class DemoApplication {
 	}
 
 }
-@Entity
-public class Pessoa {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    private String nome;
-    private String tipoDeficiencia;
-    // Outros atributos e getters/setters
-}
